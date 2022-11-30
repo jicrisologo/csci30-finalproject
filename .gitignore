@@ -1,0 +1,5 @@
+
+*.pyc
+*.cfg
+seamcarvingenv/Scripts/python.exe
+seamcarvingenv/Scripts/pythonw.exe

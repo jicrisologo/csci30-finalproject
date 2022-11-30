@@ -5,10 +5,7 @@ from picture import Picture
 class SeamCarver(Picture):
     ## TO-DO: fill in the methods below
     def energy(self, i: int, j: int) -> float:
-        '''
-        Return the energy of pixel at column i and row j
-        '''
-        raise NotImplementedError
+        return "r is " + str(self[i, j][0]) + ", g is " + str(self[i, j][1]) + ", b is " + str(self[i, j][2])
 
     def find_vertical_seam(self) -> list[int]:
         '''

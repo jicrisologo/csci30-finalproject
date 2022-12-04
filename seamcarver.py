@@ -25,6 +25,23 @@ class SeamCarver(Picture):
         Return a sequence of indices representing the lowest-energy
         vertical seam
         '''
+        
+        M = [[0] * self.width()] * self.height()
+
+        for j in range(1, self.height()):
+            for i in range(self.width()):
+
+                if i == 0:
+                    M[i, j] = self.energy(i, j) + min(self.energy(self.width(), j - 1), self.energy(i, j - 1),
+                                                      self.energy(i + 1, j - 1))
+                if i == self.width():
+                    M[i, j] = self.energy(i, j) + min(self.energy(i - 1, j - 1), self.energy(i, j - 1),
+                                                      self.energy(0, j - 1))
+                else: 
+                    M[i, j] = self.energy(i, j) + min(self.energy(i - 1, j - 1), self.energy(i, j - 1),
+                                                  self.energy(i + 1, j - 1))
+                
+                
         raise NotImplementedError
 
     def find_horizontal_seam(self) -> list[int]:

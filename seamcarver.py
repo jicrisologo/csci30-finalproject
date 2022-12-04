@@ -39,13 +39,20 @@ class SeamCarver(Picture):
         for i in range(self.width()):
             M[0][i] = self.energy(i, 0)
 
-        print(M)
-
         for j in range(1, self.height()):
             for i in range(self.width()):
-                M[i, j] = self.energy(i, j) + min(self.energy(i - 1, j - 1), self.energy(i, j - 1),
-                                                  self.energy(i + 1, j - 1))
+                if i == 0: #left edge
+                    #print("L!")
+                    M[j][i] = self.energy(i, j) + min( M[j - 1][i], M[j - 1][i + 1] )
+                elif i == self.width() - 1: #right edge
+                    #print("R!") 
+                    M[j][i] = self.energy(i, j) + min( M[j - 1][i - 1], M[j - 1][i] )
+                else:
+                    #print("O:")
+                    M[j][i] = self.energy(i, j) + min( M[j - 1][i - 1], M[j - 1][i], M[j - 1][i + 1] )
                 
+        for row in M:
+            print(row)
                 
         raise NotImplementedError
 

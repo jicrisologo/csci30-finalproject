@@ -8,17 +8,24 @@ class SeamCarver(Picture):
         x_gradient = 0
         y_gradient = 0
 
-        r_diff = self[(i + 1) % self.width(), j][0] - self[(i - 1) % self.width(), j][0]
-        g_diff = self[(i + 1) % self.width(), j][1] - self[(i - 1) % self.width(), j][1]
-        b_diff = self[(i + 1) % self.width(), j][2] - self[(i - 1) % self.width(), j][2]
+        r_diff = self[self.safe_index(i + 1, 'w'), j][0] - self[self.safe_index(i - 1, 'w'), j][0]
+        g_diff = self[self.safe_index(i + 1, 'w'), j][1] - self[self.safe_index(i - 1, 'w'), j][1]
+        b_diff = self[self.safe_index(i + 1, 'w'), j][2] - self[self.safe_index(i - 1, 'w'), j][2]
         x_gradient = r_diff ** 2 + g_diff ** 2 + b_diff ** 2
 
-        r_diff = self[i, (j + 1) % self.height()][0] - self[i, (j - 1) % self.height()][0]
-        g_diff = self[i, (j + 1) % self.height()][1] - self[i, (j - 1) % self.height()][1]
-        b_diff = self[i, (j + 1) % self.height()][2] - self[i, (j - 1) % self.height()][2]
+        r_diff = self[i, self.safe_index(j + 1, 'h')][0] - self[i, self.safe_index(j - 1, 'h')][0]
+        g_diff = self[i, self.safe_index(j + 1, 'h')][1] - self[i, self.safe_index(j - 1, 'h')][1]
+        b_diff = self[i, self.safe_index(j + 1, 'h')][2] - self[i, self.safe_index(j - 1, 'h')][2]
         y_gradient = r_diff ** 2 + g_diff ** 2 + b_diff ** 2
 
         return x_gradient + y_gradient
+
+    def safe_index(self, x, dim): #wraps index around to avoid having to write if statements for edge cases
+        if dim == 'w':
+            return x % self.width()
+        elif dim == 'h':
+            return x % self.height()
+            
 
     def find_vertical_seam(self) -> list[int]:
         '''
@@ -26,19 +33,17 @@ class SeamCarver(Picture):
         vertical seam
         '''
         
-        M = [[0] * self.width()] * self.height()
+        M = [[0 for _ in range( self.width() )] for _ in range( self.height() )]
+
+        #copying over topmost row of energy values to M
+        for i in range(self.width()):
+            M[0][i] = self.energy(i, 0)
+
+        print(M)
 
         for j in range(1, self.height()):
             for i in range(self.width()):
-
-                if i == 0:
-                    M[i, j] = self.energy(i, j) + min(self.energy(self.width(), j - 1), self.energy(i, j - 1),
-                                                      self.energy(i + 1, j - 1))
-                if i == self.width():
-                    M[i, j] = self.energy(i, j) + min(self.energy(i - 1, j - 1), self.energy(i, j - 1),
-                                                      self.energy(0, j - 1))
-                else: 
-                    M[i, j] = self.energy(i, j) + min(self.energy(i - 1, j - 1), self.energy(i, j - 1),
+                M[i, j] = self.energy(i, j) + min(self.energy(i - 1, j - 1), self.energy(i, j - 1),
                                                   self.energy(i + 1, j - 1))
                 
                 

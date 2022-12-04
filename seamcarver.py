@@ -20,6 +20,7 @@ class SeamCarver(Picture):
 
         return x_gradient + y_gradient
 
+
     def safe_index(self, x, dim): #wraps index around to avoid having to write if statements for edge cases
         if dim == 'w':
             return x % self.width()
@@ -79,16 +80,33 @@ class SeamCarver(Picture):
                     elif M[j - 1][current + 1] <= M[j - 1][current] and M[j - 1][current + 1] <= M[j - 1][current - 1]: #if r <= c and r <= l
                         potential_seam.append(current + 1) #then have the next index up be l since it's the minimum out of the 3
 
-        for seam in seam_indices: #reverse seams to make them top-to-bottom
-            seam.reverse()
-            return seam
+        min_seam_total = 1e100
+        for seam in seam_indices: #find min total valued seam out of all seams
+            if sum(seam) < min_seam_total:
+                min_seam_total = sum(seam)
+                final_seam = seam
+
+        final_seam.reverse()
+        return final_seam
+
+
+    def transpose(self): #essentially flips rows and cols
+        new = {}
+        
+        for j in range(self.height()):
+            for i in range(self.width()):
+                #print(f"({i}, {j})")
+                new[j, i] = self[i, j]
+
+        self = new
+
 
     def find_horizontal_seam(self) -> list[int]:
-        '''
-        Return a sequence of indices representing the lowest-energy
-        horizontal seam
-        '''
-        raise NotImplementedError
+        self.transpose()
+        result = self.find_vertical_seam()
+        self.transpose()
+        return result
+        
 
     def remove_vertical_seam(self, seam: list[int]):
         '''

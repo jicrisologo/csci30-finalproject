@@ -121,16 +121,18 @@ class SeamCarver(Picture):
         
 
     def remove_vertical_seam(self, seam: list[int]):
-        '''
-        Remove a vertical seam from the picture
-        '''
-        
         for j in range(self.height()):
-            for i in range(self.width()):
-                if i in self.find_vertical_seam():
-                    del self[i] 
-        
-        raise NotImplementedError
+            #print(f"Removing pixel ({seam[j]}, {j})")
+            del self[seam[j], j]
+
+        for j in range(self.height()):
+            for i in range(seam[j] + 1, self.width()):
+                #print(f"Shifting pixel ({i}, {j}) to ({i - 1}, {j})")
+                self[i - 1, j] = self[i, j]
+                del self[i, j]
+
+        self._width -= 1 #shrink width by 1 since a seam is removed
+
 
     def remove_horizontal_seam(self, seam: list[int]):
         '''

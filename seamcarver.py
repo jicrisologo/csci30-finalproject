@@ -87,7 +87,7 @@ class SeamCarver(Picture):
                 final_seam = seam
 
         final_seam.reverse()
-        print(final_seam)
+        #print(final_seam)
         return final_seam
 
 
@@ -121,11 +121,11 @@ class SeamCarver(Picture):
         
 
     def remove_vertical_seam(self, seam: list[int]):
-        for j in range(self.height()):
+        for j in range(self.height()): #deleting each pixel on seam
             #print(f"Removing pixel ({seam[j]}, {j})")
             del self[seam[j], j]
 
-        for j in range(self.height()):
+        for j in range(self.height()): #shift each pixel to the right of seam 1 pixel left
             for i in range(seam[j] + 1, self.width()):
                 #print(f"Shifting pixel ({i}, {j}) to ({i - 1}, {j})")
                 self[i - 1, j] = self[i, j]
@@ -135,15 +135,10 @@ class SeamCarver(Picture):
 
 
     def remove_horizontal_seam(self, seam: list[int]):
-        '''
-        Remove a horizontal seam from the picture
-        '''
-
-        for j in range(self.width()):
-            for i in range(self.height()):
-                if i in self.find_horizontal_seam():
-                    del self[i]
-        raise NotImplementedError
+        self.transpose()
+        self.remove_vertical_seam(seam)
+        self.transpose()
+        
 
 class SeamError(Exception):
     pass

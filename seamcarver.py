@@ -102,7 +102,11 @@ class SeamCarver(Picture):
         #for key in new:
             #print(key)
 
-        self.clear
+        temp = self.width() #swap the height and width of the image
+        self._width = self._height
+        self._height = temp
+
+        self.clear()
         for key in new:
             self[key] = new[key]
 

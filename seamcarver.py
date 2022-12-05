@@ -124,6 +124,12 @@ class SeamCarver(Picture):
         '''
         Remove a vertical seam from the picture
         '''
+        
+        for j in range(self.height()):
+            for i in range(self.width()):
+                if i in self.find_vertical_seam():
+                    del self[i] 
+        
         raise NotImplementedError
 
     def remove_horizontal_seam(self, seam: list[int]):

@@ -139,6 +139,8 @@ class SeamCarver(Picture):
 
         self._width -= 1 #shrink width by 1 since a seam is removed
 
+        raise SeamError(Exception)
+
 
     def remove_horizontal_seam(self, seam: list[int]):
         if self.height() == 1 or len(seam) != self.width():
@@ -146,6 +148,8 @@ class SeamCarver(Picture):
         self.transpose()
         self.remove_vertical_seam(seam)
         self.transpose()
+
+        raise SeamError(Exception)
         
 
 class SeamError(Exception):

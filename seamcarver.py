@@ -136,6 +136,11 @@ class SeamCarver(Picture):
         '''
         Remove a horizontal seam from the picture
         '''
+
+        for j in range(self.width()):
+            for i in range(self.height()):
+                if i in self.find_horizontal_seam():
+                    del self[i]
         raise NotImplementedError
 
 class SeamError(Exception):

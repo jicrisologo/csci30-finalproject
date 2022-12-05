@@ -87,6 +87,7 @@ class SeamCarver(Picture):
                 final_seam = seam
 
         final_seam.reverse()
+        print(final_seam)
         return final_seam
 
 
@@ -95,10 +96,17 @@ class SeamCarver(Picture):
         
         for j in range(self.height()):
             for i in range(self.width()):
-                #print(f"({i}, {j})")
                 new[j, i] = self[i, j]
 
-        self = new
+        #print(new)
+        #for key in new:
+            #print(key)
+
+        self.clear
+        for key in new:
+            self[key] = new[key]
+
+        #print(self)
 
 
     def find_horizontal_seam(self) -> list[int]:

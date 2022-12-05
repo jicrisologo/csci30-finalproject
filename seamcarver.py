@@ -5,6 +5,9 @@ from picture import Picture
 class SeamCarver(Picture):
     ## TO-DO: fill in the methods below
     def energy(self, i: int, j: int) -> float:
+        if i < 0 or i >= self.width() or j < 0 or j >= self.height():
+            raise IndexError
+        
         x_gradient = 0
         y_gradient = 0
 
@@ -121,6 +124,9 @@ class SeamCarver(Picture):
         
 
     def remove_vertical_seam(self, seam: list[int]):
+        if self.width() == 1 or len(seam) != self.height():
+            raise SeamError
+        
         for j in range(self.height()): #deleting each pixel on seam
             #print(f"Removing pixel ({seam[j]}, {j})")
             del self[seam[j], j]
@@ -135,6 +141,8 @@ class SeamCarver(Picture):
 
 
     def remove_horizontal_seam(self, seam: list[int]):
+        if self.height() == 1 or len(seam) != self.width():
+            raise SeamError
         self.transpose()
         self.remove_vertical_seam(seam)
         self.transpose()

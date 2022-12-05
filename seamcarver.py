@@ -130,6 +130,11 @@ class SeamCarver(Picture):
         if self.width() == 1 or len(seam) != self.height():
             raise SeamError
 
+        for i in range(len(seam) - 1):
+            if abs(seam[i] - seam[i+1]) >= 2:
+                raise SeamError
+
+
         for j in range(self.height()):  # deleting each pixel on seam
             # print(f"Removing pixel ({seam[j]}, {j})")
             del self[seam[j], j]
@@ -153,3 +158,4 @@ class SeamCarver(Picture):
 
 class SeamError(Exception):
     pass
+
